@@ -149,7 +149,7 @@ void Logger::run()
             case state::WATCH_MENU:
             case state::WATCH_ADD_MENU:
                 if (key != '@' && key != '!' &&
-                    key_to_screen.find(key) == key_to_screen.end()) {
+                    key_to_watch.find(key) == key_to_watch.end()) {
                     statusmsg = "Could not find requested watch";
 
                     state = state::MAIN_MENU;
@@ -177,14 +177,14 @@ void Logger::run()
 
                 break;
             case state::WATCH_ADD_CLEAR_MENU:
-                if (key_to_screen.find(key) == key_to_screen.end()) {
+                if (key_to_watch.find(key) == key_to_watch.end()) {
                     statusmsg = "Could not find requested watch";
 
                     state = state::MAIN_MENU;
                     break;
                 }
 
-                rm_active_watch(key_to_screen[key]);
+                rm_active_watch(key_to_watch[key]);
 
                 statusmsg      = "";
                 state          = state::MAIN_MENU;
