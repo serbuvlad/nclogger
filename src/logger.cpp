@@ -1,5 +1,3 @@
-#include <ncurses.h>
-
 #include <algorithm>
 #include <iostream>
 #include <nclogger/logger.hpp>
@@ -39,7 +37,9 @@ void Logger::run()
 
         WATCH_MENU,
         WATCH_ADD_MENU,
-        WATCH_ADD_CLEAR_MENU
+        WATCH_ADD_CLEAR_MENU,
+
+        HELP_MENU
     } state = state::MAIN_MENU;
 
     while ((key = getch()) != 27) {
@@ -70,6 +70,15 @@ void Logger::run()
                     statusmsg = "W";
 
                     state = state::WATCH_ADD_MENU;
+                    break;
+                case 'h':
+                    statusmsg = "";
+
+                    draw_help();
+
+                    drawing_main_screen = false;
+
+                    state = state::HELP_MENU;
                     break;
                 case KEY_UP:
                     increment_delta_history();
@@ -191,6 +200,22 @@ void Logger::run()
                 redraw_request = true;
 
                 break;
+            case state::HELP_MENU:
+
+                draw_help();
+
+                if (key == 'h') {
+                    redraw_request      = true;
+                    state               = state::MAIN_MENU;
+                    drawing_main_screen = true;
+                } else if (key == KEY_UP) {
+                    scroll_up_in_help();
+                } else if (key == KEY_DOWN) {
+                    scroll_down_in_help();
+                }
+
+                statusmsg = "";
+                break;
             }
         }
 
@@ -219,9 +244,11 @@ int Logger::request_screen(int key, std::string name)
 {
     std::lock_guard<std::mutex> l(mux);
 
-    int index = ScreenManager::request_screen(std::move(name));
+    int index = ScreenManager::request_screen(name);
 
     key_to_screen.insert({ key, index });
+
+    add_screen_to_help(static_cast<char>(key), std::move(name));
 
     return index;
 }
@@ -244,11 +271,10 @@ void Logger::log(int screen_index, LogLevel log_level, std::string line)
 {
     std::lock_guard<std::mutex> l(mux);
 
-    int update = ScreenManager::screen_add_line(screen_index,
-                                                log_level,
-                                                std::move(line));
+    int update =
+        ScreenManager::screen_log(screen_index, log_level, std::move(line));
 
-    if (update) {
+    if (update && drawing_main_screen) {
         draw_screens();
         draw_watches();
         draw_status();
@@ -259,9 +285,11 @@ int Logger::request_watch(int key, std::string name)
 {
     std::lock_guard<std::mutex> l(mux);
 
-    int index = WatchManager::register_watch(std::move(name));
+    int index = WatchManager::register_watch(name);
 
     key_to_watch.insert({ key, index });
+
+    add_watch_to_help(static_cast<char>(key), std::move(name));
 
     return index;
 }
@@ -287,7 +315,7 @@ void Logger::set_watch_value(int         watch_index,
                                                 value_index,
                                                 std::move(value));
 
-    if (update) {
+    if (update && drawing_main_screen) {
         draw_watches();
         draw_status();
     }

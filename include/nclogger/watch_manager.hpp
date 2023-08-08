@@ -1,6 +1,7 @@
 #ifndef NCLOGGER_WATCH_MANAGER_HPP
 #define NCLOGGER_WATCH_MANAGER_HPP
 
+#include <nclogger/version.hpp>
 #include <nclogger/watch.hpp>
 
 namespace nclogger {

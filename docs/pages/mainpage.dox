@@ -1,0 +1,5 @@
+/// \mainpage
+///
+/// \section mainpage_intro Introduction
+///
+/// Nclogger is an ncurses logging library

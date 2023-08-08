@@ -2,6 +2,7 @@
 #define NCLOGGER_KNOBS_HPP
 
 #include <cstddef>
+#include <nclogger/version.hpp>
 
 namespace nclogger {
 

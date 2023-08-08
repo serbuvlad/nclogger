@@ -37,6 +37,13 @@ DerivePointerAlignment: false
 DisableFormat: false
 FixNamespaceComments: true
 IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex: 'nclogger/'
+    Priority: 1
+  - Regex: '^<[^c][^.]*>$|^<(charconv|chrono|codecvt|compare|concepts|condition_variable|coroutine)>$'
+    Priority: 2
+  - Regex: '^<c[^.]*>$'
+    Priority: 3
 IndentCaseLabels: false
 IndentPPDirectives: None
 IndentWidth: 4
@@ -64,7 +71,7 @@ SpacesInCStyleCastParentheses: false
 SpacesInContainerLiterals: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
-Standard: Latest
+Standard: c++11
 UseTab: Never
 
 ...

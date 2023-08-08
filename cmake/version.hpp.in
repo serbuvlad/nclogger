@@ -1,7 +1,7 @@
 #ifndef NCLOGGER_VERSION_HPP
 #define NCLOGGER_VERSION_HPP
 
-#include <string>
+@NCLOGGER_CURSES_INCLUDE@
 
 namespace nclogger {
 
@@ -9,7 +9,7 @@ constexpr int NCLOGGER_VERSION_MAJOR = @PROJECT_VERSION_MAJOR@;
 constexpr int NCLOGGER_VERSION_MINOR = @PROJECT_VERSION_MINOR@;
 constexpr int NCLOGGER_VERSION_PATCH = @PROJECT_VERSION_PATCH@;
 
-const std::string NCLOGGER_VERSION { "v@PROJECT_VERSION@" };
+constexpr char NCLOGGER_VERSION[] = "v@PROJECT_VERSION@";
 
 }
 

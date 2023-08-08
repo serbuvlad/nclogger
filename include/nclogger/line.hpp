@@ -3,14 +3,22 @@
 
 #include <fstream>
 #include <memory>
+#include <nclogger/version.hpp>
+#include <nclogger/text_block.hpp>
 #include <string>
 #include <vector>
+
+// screen names are on a separete window, to the left of the lines window
 
 namespace nclogger {
 
 enum class LogLevel { INFO = 0, WARN = 1, ERROR = 2, FATAL = 3 };
 
-struct Line {
+constexpr std::size_t log_level_n = 4;
+
+class Line {
+    std::unique_ptr<TextBlock> text_block;
+
     std::string message;
     std::string screen_name;
 
@@ -19,16 +27,32 @@ struct Line {
 
     LogLevel log_level;
 
-    [[nodiscard]] std::string log_level_string() const;
-    void                      draw(int y, bool show_screen_name) const;
-    void                      write(std::ostream& out) const;
+    inline std::string log_level_string() const;
 
-    static std::shared_ptr<const Line> create(std::string message,
-                                              std::string screen_name,
-                                              LogLevel    log_level);
+public:
+    Line(std::string message, std::string screen_name, LogLevel log_level);
+
+    void write(std::ostream& out) const;
+
+    inline auto get_time_ns() const -> std::int64_t {
+        return time_ns;
+    }
+
+    inline auto get_log_level() const -> LogLevel {
+        return log_level;
+    }
+
+    // encapsulation of text block
+    inline auto get_height() const -> std::size_t {
+        return text_block->get_height();
+    }
+
+    inline void draw(WINDOW* w, std::size_t y, bool above_screen) {
+        return text_block->draw(w, y, above_screen);
+    }
 };
 
-typedef std::vector<std::shared_ptr<const Line>> Lines;
+typedef std::vector<std::shared_ptr<Line>> Lines;
 
 }  // namespace nclogger
 

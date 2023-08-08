@@ -1,7 +1,4 @@
-#include "nclogger/canvas.hpp"
-
-#include <ncurses.h>
-
+#include <nclogger/canvas.hpp>
 #include <nclogger/knobs.hpp>
 #include <utility>
 
@@ -71,6 +68,11 @@ void Canvas::maybe_resize_lines()
         lines.erase(lines.begin(),
                     lines.begin() + perf_screen_max_over_capacity);
     }
+}
+
+const std::string& Canvas::get_name() const
+{
+    return name;
 }
 
 }  // namespace nclogger

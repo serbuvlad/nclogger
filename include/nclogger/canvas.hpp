@@ -2,6 +2,7 @@
 #define NCLOGGER_CANVAS_HPP
 
 #include <nclogger/line.hpp>
+#include <nclogger/version.hpp>
 
 namespace nclogger {
 
@@ -12,6 +13,9 @@ private:
 
     Lines       lines;
     std::string name;
+
+public:
+    [[nodiscard]] const std::string& get_name() const;
 
 public:
     explicit Canvas(std::string name);

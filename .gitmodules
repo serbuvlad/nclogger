@@ -1,0 +1,6 @@
+[submodule "extern/utfcpp"]
+	path = extern/utfcpp
+	url = https://github.com/nemtrif/utfcpp
+[submodule "extern/m.css"]
+	path = extern/m.css
+	url = https://github.com/mosra/m.css
